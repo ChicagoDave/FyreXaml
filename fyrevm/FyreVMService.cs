@@ -9,25 +9,33 @@ using System.IO;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.ApplicationModel;
+using Windows.UI.Xaml.Controls;
+using System.Threading;
 
 using FyreVM;
 
 namespace fyrexaml.Services
 {
-    public class GameService
+    public class FyreVMService
     {
         private Engine vm = null;
         private string command = "";
         private Stream restoreData = null;
+        private AutoResetEvent inputReadyEvent = new AutoResetEvent(false);
+        private Page page = null;
 
         public Dictionary<string, string> ChannelData { get; private set; }
 
-        public GameService()
+        public FyreVMService()
         {
 
         }
 
-        public async Task LoadGame() {
+        public static PortableDispatcher ViewModelLocator { get; set; }
+
+        public async Task LoadGame(Page page) {
+
+            this.page = page;
 
             StorageFile gameFile = await Package.Current.InstalledLocation.GetFileAsync(@"Game\shadow-w8.ulx");
             byte[] gameFileData = await ReadFromFile(gameFile);
@@ -61,20 +69,29 @@ namespace fyrexaml.Services
 
         private void vm_OutputReady(object sender, OutputReadyEventArgs e)
         {
-            if (e.Package.Keys.Count > 0)
-            {
-                if (command.ToLower() == "save" || command.ToLower() == "restore")
+            ViewModelLocator.Invoke(new Action(() => {
+                if (e.Package.Keys.Count > 0)
                 {
-                    return;
-                }
+                    if (command.ToLower() == "save" || command.ToLower() == "restore")
+                    {
+                        return;
+                    }
 
-                ChannelData = (Dictionary<string, string>)e.Package;
-            }
+                    ChannelData = (Dictionary<string, string>)e.Package;
+                }
+            }));
+
         }
 
         private void vm_LineWanted(object sender, LineWantedEventArgs e)
         {
+            ViewModelLocator.Invoke(RequestLine);
+            inputReadyEvent.WaitOne();
             e.Line = command;
+        }
+
+        private void RequestLine()
+        {
         }
 
         private void vm_KeyWanted(object sender, KeyWantedEventArgs e)

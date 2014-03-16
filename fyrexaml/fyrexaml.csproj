@@ -107,32 +107,21 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FyreVM\BigEndian.cs" />
-    <Compile Include="FyreVM\Engine.cs" />
-    <Compile Include="FyreVM\GlkWrapper.cs" />
-    <Compile Include="FyreVM\HeapAllocator.cs" />
-    <Compile Include="FyreVM\Opcodes.cs" />
-    <Compile Include="FyreVM\Output.cs" />
-    <Compile Include="FyreVM\OutputBuffer.cs" />
-    <Compile Include="FyreVM\Quetzal.cs" />
-    <Compile Include="FyreVM\UlxImage.cs" />
-    <Compile Include="FyreVM\Veneer.cs" />
-    <Compile Include="FyreVM\VMException.cs" />
+    <Compile Include="Common\WinRTDispatcher.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\GameService.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="FyreVM\COPYRIGHT" />
     <None Include="fyrexaml_TemporaryKey.pfx" />
     <Content Include="Game\shadow-w8.ulx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Game\COPYRIGHT" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +144,16 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\netcore45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\fyrevm\fyrevm.csproj">
+      <Project>{3286511c-0c5b-47f4-a204-8c110a4af3d1}</Project>
+      <Name>fyrevm</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="FyreVM\" />
+    <Folder Include="Services\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

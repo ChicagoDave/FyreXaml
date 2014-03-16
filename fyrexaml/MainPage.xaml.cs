@@ -22,7 +22,7 @@ namespace fyrexaml
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private GameService gameService = null;
+        private FyreVMService gameService = null;
         
         public MainPage()
         {
@@ -38,8 +38,11 @@ namespace fyrexaml
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            gameService = new GameService();
-            await gameService.LoadGame();
+            FyreVMService.ViewModelLocator = new Common.WinRTDispatcher();
+
+            gameService = new FyreVMService();
+
+            await gameService.LoadGame(this);
 
             UpdateDisplay();
         }
